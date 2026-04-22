@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CineScope | Movie Discovery SPA</title>
+    <link rel="preconnect" href="https://image.tmdb.org">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="#home" aria-label="CineScope home">
+          <span class="brand-mark">C</span>
+          <span>CineScope</span>
+        </a>
+        <div class="nav-actions">
+          <button class="nav-link is-active" type="button" data-view="home">Discover</button>
+          <button class="nav-link" type="button" data-view="favorites">Favorites</button>
+          <button class="icon-button" type="button" id="apiKeyButton" aria-label="Set TMDB API key" title="Set TMDB API key">
+            <span aria-hidden="true">key</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">TMDB powered movie explorer</p>
+          <h1 id="heroTitle">Find movies worth watching tonight.</h1>
+          <p class="hero-text">Search titles, browse popular picks, filter by genre, and save a local watchlist in one responsive single page app.</p>
+        </div>
+        <form class="search-panel" id="searchForm" autocomplete="off">
+          <label for="searchInput">Search movies</label>
+          <div class="search-row">
+            <input id="searchInput" name="query" type="search" placeholder="Try Inception, Dune, Spider-Man..." aria-describedby="searchHelp">
+            <button type="submit">Search</button>
+          </div>
+          <div id="suggestions" class="suggestions" role="listbox" aria-label="Search suggestions"></div>
+          <p id="searchHelp">Live suggestions appear as you type.</p>
+        </form>
+      </section>
+
+      <section class="controls-band" aria-label="Movie browsing controls">
+        <div class="controls">
+          <div class="control-group">
+            <label for="genreSelect">Genre</label>
+            <select id="genreSelect">
+              <option value="">All genres</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="sortSelect">Sort</label>
+            <select id="sortSelect">
+              <option value="popularity.desc">Most popular</option>
+              <option value="vote_average.desc">Highest rated</option>
+              <option value="primary_release_date.desc">Newest releases</option>
+              <option value="revenue.desc">Highest revenue</option>
+            </select>
+          </div>
+          <div class="segmented" role="group" aria-label="Browse mode">
+            <button class="segment is-selected" type="button" data-mode="popular">Popular</button>
+            <button class="segment" type="button" data-mode="discover">Discover</button>
+            <button class="segment" type="button" data-mode="top_rated">Top Rated</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-shell" aria-live="polite">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow" id="resultKicker">Popular movies</p>
+            <h2 id="resultTitle">Explore Movies</h2>
+          </div>
+          <p id="resultCount">Ready to load movies.</p>
+        </div>
+
+        <div id="alert" class="alert" hidden></div>
+        <div id="loading" class="loading" hidden>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div id="movieGrid" class="movie-grid"></div>
+        <div id="emptyState" class="empty-state" hidden>
+          <h3>No movies found</h3>
+          <p>Try another search term or change the active filters.</p>
+        </div>
+        <div class="pagination">
+          <button id="prevPage" type="button">Previous</button>
+          <span id="pageLabel">Page 1</span>
+          <button id="nextPage" type="button">Next</button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="modal" id="detailModal" aria-hidden="true" aria-labelledby="detailTitle" role="dialog">
+      <div class="modal-backdrop" data-close-modal></div>
+      <article class="modal-card">
+        <button class="modal-close" type="button" data-close-modal aria-label="Close movie details">x</button>
+        <div id="detailContent"></div>
+      </article>
+    </aside>
+
+    <aside class="modal" id="keyModal" aria-hidden="true" aria-labelledby="keyTitle" role="dialog">
+      <div class="modal-backdrop" data-close-key></div>
+      <article class="modal-card key-card">
+        <button class="modal-close" type="button" data-close-key aria-label="Close API key form">x</button>
+        <h2 id="keyTitle">TMDB API Key</h2>
+        <p>Enter your TMDB v3 API key. It stays in this browser with localStorage and is never committed to the project files.</p>
+        <form id="keyForm">
+          <label for="apiKeyInput">API key</label>
+          <input id="apiKeyInput" type="password" placeholder="Paste your TMDB API key">
+          <div class="form-actions">
+            <button type="submit">Save Key</button>
+            <button class="ghost" type="button" id="clearKey">Clear</button>
+          </div>
+        </form>
+      </article>
+    </aside>
+
+    <template id="movieCardTemplate">
+      <article class="movie-card">
+        <button class="poster-button" type="button">
+          <img alt="" loading="lazy">
+          <span class="rating"></span>
+        </button>
+        <div class="movie-card-body">
+          <h3></h3>
+          <p></p>
+          <div class="card-actions">
+            <button class="details-button" type="button">Details</button>
+            <button class="favorite-button" type="button">Save</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
